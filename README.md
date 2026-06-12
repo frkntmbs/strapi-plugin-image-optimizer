@@ -2,12 +2,12 @@
 
 Per-image optimization controls for the Strapi 5 Media Library upload flow.
 
-[![npm](https://img.shields.io/npm/v/strapi-plugin-image-optimizer)](https://www.npmjs.com/package/strapi-plugin-image-optimizer)
+[![npm](https://img.shields.io/npm/v/@frkntmbs/strapi-plugin-image-optimizer)](https://www.npmjs.com/package/@frkntmbs/strapi-plugin-image-optimizer)
 [![Strapi](https://img.shields.io/badge/Strapi-5.x-4945FF)](https://strapi.io)
 [![Node](https://img.shields.io/badge/Node-20--24-339933)](https://nodejs.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-[GitHub](https://github.com/frkntmbs/strapi-plugin-image-optimizer) · [Issues](https://github.com/frkntmbs/strapi-plugin-image-optimizer/issues) · [npm](https://www.npmjs.com/package/strapi-plugin-image-optimizer)
+[GitHub](https://github.com/frkntmbs/strapi-plugin-image-optimizer) · [Issues](https://github.com/frkntmbs/strapi-plugin-image-optimizer/issues) · [npm](https://www.npmjs.com/package/@frkntmbs/strapi-plugin-image-optimizer)
 
 ---
 
@@ -16,6 +16,32 @@ Per-image optimization controls for the Strapi 5 Media Library upload flow.
 Strapi's Media Library uploads images as-is unless you add custom server logic. There is no built-in way to choose different optimization settings per file at upload time.
 
 **Image Optimizer** adds a sparkle button to each pending upload card in the Media Library. Before you upload, you can choose to keep the file unchanged, apply your global profile, or configure format, quality, and dimensions for that specific image.
+
+## Screenshots
+
+### Media Library upload
+
+Each pending asset shows the current optimization choice and a sparkle button to open per-file settings.
+
+![Media Library upload modal with optimization controls](docs/screenshots/upload-modal.png)
+
+### Optimization choice
+
+Pick **Keep original**, **Apply global settings**, or **Custom** for the selected image.
+
+![Image optimization choice dialog](docs/screenshots/optimization-choice.png)
+
+### Custom per-file settings
+
+In **Custom** mode, configure format, quality, and output dimensions with aspect-ratio preservation.
+
+![Custom image optimization settings](docs/screenshots/custom-settings.png)
+
+### Global settings
+
+Configure default upload choice and the global optimization profile under **Settings → Global → Image Optimizer**.
+
+![Image Optimizer global settings page](docs/screenshots/global-settings.png)
 
 ## Features
 
@@ -53,7 +79,7 @@ flowchart LR
 ## Installation
 
 ```bash
-npm install strapi-plugin-image-optimizer
+npm install @frkntmbs/strapi-plugin-image-optimizer
 ```
 
 Enable and configure the plugin in `config/plugins.ts`:
@@ -175,7 +201,7 @@ npm run watch:link
 In your Strapi app:
 
 ```bash
-npx yalc add --link strapi-plugin-image-optimizer && npm install
+npx yalc add --link @frkntmbs/strapi-plugin-image-optimizer && npm install
 npm run develop
 ```
 

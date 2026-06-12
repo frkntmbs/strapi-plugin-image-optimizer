@@ -1,5 +1,8 @@
 {
-  "name": "strapi-plugin-image-optimizer",
+  "name": "@frkntmbs/strapi-plugin-image-optimizer",
+  "publishConfig": {
+    "access": "public"
+  },
   "version": "1.0.0",
   "description": "Per-image optimization controls for the Strapi Media Library upload flow (original, global profile, or custom resize/quality).",
   "license": "MIT",
@@ -28,6 +31,7 @@
     "dist",
     "admin",
     "server",
+    "docs",
     "strapi-admin.js",
     "strapi-server.js",
     "README.md",
