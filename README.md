@@ -1,61 +1,188 @@
-# 🚀 Getting started with Strapi
+# Strapi Plugin Image Optimizer
 
-Strapi comes with a full featured [Command Line Interface](https://docs.strapi.io/dev-docs/cli) (CLI) which lets you scaffold and manage your project in seconds.
+Per-image optimization controls for the Strapi 5 Media Library upload flow.
 
-### `develop`
+[![npm](https://img.shields.io/npm/v/strapi-plugin-image-optimizer)](https://www.npmjs.com/package/strapi-plugin-image-optimizer)
+[![Strapi](https://img.shields.io/badge/Strapi-5.x-4945FF)](https://strapi.io)
+[![Node](https://img.shields.io/badge/Node-20--24-339933)](https://nodejs.org)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-Start your Strapi application with autoReload enabled. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-develop)
-
-```
-npm run develop
-# or
-yarn develop
-```
-
-### `start`
-
-Start your Strapi application with autoReload disabled. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-start)
-
-```
-npm run start
-# or
-yarn start
-```
-
-### `build`
-
-Build your admin panel. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-build)
-
-```
-npm run build
-# or
-yarn build
-```
-
-## ⚙️ Deployment
-
-Strapi gives you many possible deployment options for your project including [Strapi Cloud](https://cloud.strapi.io). Browse the [deployment section of the documentation](https://docs.strapi.io/dev-docs/deployment) to find the best solution for your use case.
-
-```
-yarn strapi deploy
-```
-
-## 📚 Learn more
-
-- [Resource center](https://strapi.io/resource-center) - Strapi resource center.
-- [Strapi documentation](https://docs.strapi.io) - Official Strapi documentation.
-- [Strapi tutorials](https://strapi.io/tutorials) - List of tutorials made by the core team and the community.
-- [Strapi blog](https://strapi.io/blog) - Official Strapi blog containing articles made by the Strapi team and the community.
-- [Changelog](https://strapi.io/changelog) - Find out about the Strapi product updates, new features and general improvements.
-
-Feel free to check out the [Strapi GitHub repository](https://github.com/strapi/strapi). Your feedback and contributions are welcome!
-
-## ✨ Community
-
-- [Discord](https://discord.strapi.io) - Come chat with the Strapi community including the core team.
-- [Forum](https://forum.strapi.io/) - Place to discuss, ask questions and find answers, show your Strapi project and get feedback or just talk with other Community members.
-- [Awesome Strapi](https://github.com/strapi/awesome-strapi) - A curated list of awesome things related to Strapi.
+[GitHub](https://github.com/frkntmbs/strapi-plugin-image-optimizer) · [Issues](https://github.com/frkntmbs/strapi-plugin-image-optimizer/issues) · [npm](https://www.npmjs.com/package/strapi-plugin-image-optimizer)
 
 ---
 
-<sub>🤫 Psst! [Strapi is hiring](https://strapi.io/careers).</sub>
+## Overview
+
+Strapi's Media Library uploads images as-is unless you add custom server logic. There is no built-in way to choose different optimization settings per file at upload time.
+
+**Image Optimizer** adds a sparkle button to each pending upload card in the Media Library. Before you upload, you can choose to keep the file unchanged, apply your global profile, or configure format, quality, and dimensions for that specific image.
+
+## Features
+
+- **Three upload modes** — Keep original, Apply global settings, or Custom per file
+- **Two optimization formats** — Convert to WebP, or Compress while keeping the original format
+- **Per-format quality controls** — WebP quality, JPEG quality, and PNG compression level
+- **Custom resize** — Set output width and height with automatic aspect-ratio preservation
+- **Global settings page** — Configure defaults under **Settings → Global → Image Optimizer**
+- **Admin i18n** — English and Turkish translations included
+- **Role-based access** — Separate permissions for reading and updating global settings
+
+## How it works
+
+```mermaid
+flowchart LR
+  uploadModal[UploadModal] --> sparkleBtn[SparkleButton]
+  sparkleBtn --> choicePanel[ChoicePanel]
+  choicePanel --> fetchPatch[FetchPatch]
+  fetchPatch --> imageOptimizerPrefs[imageOptimizerPreferences]
+  imageOptimizerPrefs --> serverMiddleware[ServerMiddleware]
+  serverMiddleware --> sharpOptimize[SharpOptimize]
+  sharpOptimize --> mediaLibrary[MediaLibrary]
+```
+
+1. You pick optimization settings in the upload dialog.
+2. Preferences are sent alongside the file in a dedicated `imageOptimizerPreferences` field (Strapi's `fileInfo` validation only allows a fixed set of keys).
+3. Server middleware merges preferences into the upload pipeline before [Sharp](https://sharp.pixelplumbing.com/) processes the image.
+
+## Requirements
+
+- [Strapi](https://strapi.io) **5.x**
+- Node.js **20–24**
+- `@strapi/plugin-upload` (included with Strapi)
+
+## Installation
+
+```bash
+npm install strapi-plugin-image-optimizer
+```
+
+Enable and configure the plugin in `config/plugins.ts`:
+
+```ts
+export default {
+  'image-optimizer': {
+    enabled: true,
+    config: {
+      defaultChoice: 'original',
+      defaultMode: 'compress',
+      webpQuality: 82,
+      jpegQuality: 80,
+      pngCompressionLevel: 9,
+    },
+  },
+};
+```
+
+Rebuild the admin panel and restart Strapi:
+
+```bash
+npm run build
+npm run develop
+```
+
+When installed from npm, no `resolve` path is required — Strapi loads the plugin from `node_modules` automatically.
+
+## Configuration
+
+All options can be set in `config/plugins.ts` (defaults) and overridden from the admin settings page (stored in the plugin store).
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `defaultChoice` | `'original'` \| `'global'` \| `'custom'` | `'original'` | Pre-selected option when opening the upload dialog for a new image |
+| `defaultMode` | `'webp'` \| `'compress'` | `'compress'` | Optimization format used for global and custom profiles |
+| `webpQuality` | `1–100` | `82` | WebP output quality |
+| `jpegQuality` | `1–100` | `80` | JPEG output quality |
+| `pngCompressionLevel` | `0–9` | `9` | PNG compression level (higher = smaller file, slower) |
+
+### Optimization formats
+
+| Mode | Behavior |
+|------|----------|
+| **WebP** (`webp`) | Converts the image to WebP. Typically yields the smallest file size. |
+| **Compress** (`compress`) | Keeps the original format (JPEG, PNG, etc.) and reduces quality/compression. |
+
+## Usage
+
+### Upload flow
+
+1. Open **Media Library** → **Add new assets**
+2. Select one or more images
+3. Hover a pending card and click the **sparkle** button (**Optimization settings**)
+4. Choose a mode, adjust settings if needed, and click **Save**
+5. Click **Upload** — each file uses the profile shown on its card
+
+Global defaults can be changed anytime under **Settings → Global → Image Optimizer**.
+
+### Upload modes
+
+#### Keep original
+
+No optimization is applied. The file is uploaded exactly as selected — same format, quality, and dimensions.
+
+#### Apply global settings
+
+Uses the global optimization profile from the settings page (format + quality). Resize is not applied in this mode.
+
+#### Custom
+
+Configure settings for a single image:
+
+- **Optimization format** — WebP or Compress
+- **Quality** — Fields shown based on the selected format and file extension (e.g. JPEG quality for `.jpg`, PNG compression for `.png`)
+- **Output dimensions** — Defaults to the original size; change width or height to resize (the other dimension updates to preserve aspect ratio)
+
+## Permissions
+
+Global settings are protected by admin permissions:
+
+| Action | Description |
+|--------|-------------|
+| `plugin::image-optimizer.settings.read` | View global Image Optimizer settings |
+| `plugin::image-optimizer.settings.update` | Update global Image Optimizer settings |
+
+Assign these in **Settings → Administration panel → Roles** for each admin role that should manage global defaults.
+
+## Limitations
+
+- **SVG and GIF** files are not processed — they upload unchanged regardless of the selected mode
+- **Resize** is only available in **Custom** mode, not in Apply global settings
+- Strapi uploads each pending card in a separate request; preferences are matched to the correct file by name and card order
+- Optimization runs at upload time only — replacing an existing asset in the Media Library follows the same upload pipeline
+
+## Development
+
+Clone the repository and install dependencies:
+
+```bash
+git clone https://github.com/frkntmbs/strapi-plugin-image-optimizer.git
+cd strapi-plugin-image-optimizer
+npm install
+```
+
+Build and verify the package:
+
+```bash
+npm run build
+npm run verify
+```
+
+### Link to a Strapi project
+
+```bash
+npm run watch:link
+```
+
+In your Strapi app:
+
+```bash
+npx yalc add --link strapi-plugin-image-optimizer && npm install
+npm run develop
+```
+
+## License
+
+[MIT](LICENSE)
+
+## Author
+
+[frkntmbs](https://github.com/frkntmbs)

@@ -1,41 +1,93 @@
 {
-  "name": "test-strapi",
-  "version": "0.1.0",
-  "private": true,
-  "description": "A Strapi application",
+  "name": "strapi-plugin-image-optimizer",
+  "version": "1.0.0",
+  "description": "Per-image optimization controls for the Strapi Media Library upload flow (original, global profile, or custom resize/quality).",
+  "license": "MIT",
+  "keywords": [
+    "strapi",
+    "strapi-plugin",
+    "plugin",
+    "image",
+    "optimizer",
+    "webp",
+    "compress",
+    "upload",
+    "media-library",
+    "sharp"
+  ],
+  "author": "frkntmbs",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/frkntmbs/strapi-plugin-image-optimizer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/frkntmbs/strapi-plugin-image-optimizer/issues"
+  },
+  "homepage": "https://github.com/frkntmbs/strapi-plugin-image-optimizer#readme",
+  "files": [
+    "dist",
+    "admin",
+    "server",
+    "strapi-admin.js",
+    "strapi-server.js",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
-    "build": "strapi build",
-    "console": "strapi console",
-    "deploy": "strapi deploy",
-    "dev": "strapi develop",
-    "develop": "strapi develop",
-    "start": "strapi start",
-    "strapi": "strapi",
-    "upgrade": "npx @strapi/upgrade latest",
-    "upgrade:dry": "npx @strapi/upgrade latest --dry"
+    "build": "strapi-plugin build",
+    "verify": "strapi-plugin verify",
+    "prepublishOnly": "npm run build && npm run verify",
+    "watch": "strapi-plugin watch",
+    "watch:link": "strapi-plugin watch:link"
+  },
+  "exports": {
+    "./strapi-admin": {
+      "source": "./admin/src/index.ts",
+      "import": "./dist/admin/index.mjs",
+      "require": "./dist/admin/index.js",
+      "default": "./dist/admin/index.js"
+    },
+    "./strapi-server": {
+      "source": "./server/index.js",
+      "import": "./dist/server/index.mjs",
+      "require": "./dist/server/index.js",
+      "default": "./dist/server/index.js"
+    },
+    "./package.json": "./package.json"
   },
   "dependencies": {
-    "@strapi/plugin-cloud": "5.48.0",
-    "@strapi/plugin-users-permissions": "5.48.0",
-    "@strapi/strapi": "5.48.0",
-    "better-sqlite3": "12.8.0",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "react-router-dom": "^6.0.0",
-    "styled-components": "^6.0.0"
+    "sharp": "^0.33.5"
   },
   "devDependencies": {
-    "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "typescript": "^5"
+    "@strapi/sdk-plugin": "^6.1.1",
+    "@strapi/strapi": "^5.48.0",
+    "@strapi/typescript-utils": "^5.48.0",
+    "esbuild-register": "^3.6.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-intl": "^6.6.2",
+    "react-router-dom": "^6.30.3",
+    "styled-components": "^6.1.0",
+    "typescript": "^5.7.0"
+  },
+  "peerDependencies": {
+    "@strapi/design-system": "^2.0.0",
+    "@strapi/icons": "^2.0.0",
+    "@strapi/strapi": "^5.0.0",
+    "@strapi/utils": "^5.0.0",
+    "react": "^17.0.0 || ^18.0.0",
+    "react-dom": "^17.0.0 || ^18.0.0",
+    "react-router-dom": "^6.0.0",
+    "styled-components": "^6.0.0"
   },
   "engines": {
     "node": ">=20.0.0 <=24.x.x",
     "npm": ">=6.0.0"
   },
   "strapi": {
-    "uuid": "f79d0d36-f132-49b6-966b-db6f07271ce0",
-    "installId": "2e3cff35714d339dc0467c530833dc6da6e507ea84a9364c55af6e14352b77a5"
+    "name": "image-optimizer",
+    "displayName": "Image Optimizer",
+    "description": "Per-image optimization controls for Media Library uploads",
+    "kind": "plugin"
   }
 }
