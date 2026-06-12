@@ -23,25 +23,25 @@ Strapi's Media Library uploads images as-is unless you add custom server logic. 
 
 Each pending asset shows the current optimization choice and a sparkle button to open per-file settings.
 
-![Media Library upload modal with optimization controls](docs/screenshots/upload-modal.png)
+![Media Library upload modal with optimization controls](https://raw.githubusercontent.com/frkntmbs/strapi-plugin-image-optimizer/main/docs/screenshots/upload-modal.png)
 
 ### Optimization choice
 
 Pick **Keep original**, **Apply global settings**, or **Custom** for the selected image.
 
-![Image optimization choice dialog](docs/screenshots/optimization-choice.png)
+![Image optimization choice dialog](https://raw.githubusercontent.com/frkntmbs/strapi-plugin-image-optimizer/main/docs/screenshots/optimization-choice.png)
 
 ### Custom per-file settings
 
 In **Custom** mode, configure format, quality, and output dimensions with aspect-ratio preservation.
 
-![Custom image optimization settings](docs/screenshots/custom-settings.png)
+![Custom image optimization settings](https://raw.githubusercontent.com/frkntmbs/strapi-plugin-image-optimizer/main/docs/screenshots/custom-settings.png)
 
 ### Global settings
 
 Configure default upload choice and the global optimization profile under **Settings → Global → Image Optimizer**.
 
-![Image Optimizer global settings page](docs/screenshots/global-settings.png)
+![Image Optimizer global settings page](https://raw.githubusercontent.com/frkntmbs/strapi-plugin-image-optimizer/main/docs/screenshots/global-settings.png)
 
 ## Features
 
