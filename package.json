@@ -3,7 +3,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Per-image optimization controls for the Strapi Media Library upload flow (original, global profile, or custom resize/quality).",
   "license": "MIT",
   "keywords": [
