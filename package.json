@@ -9,11 +9,15 @@
   "keywords": [
     "strapi",
     "strapi-plugin",
+    "strapi-5",
     "plugin",
     "image",
+    "image-optimizer",
+    "image-compression",
     "optimizer",
     "webp",
     "compress",
+    "resize",
     "upload",
     "media-library",
     "sharp"

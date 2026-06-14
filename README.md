@@ -175,6 +175,26 @@ Assign these in **Settings → Administration panel → Roles** for each admin r
 - Strapi uploads each pending card in a separate request; preferences are matched to the correct file by name and card order
 - Optimization runs at upload time only — replacing an existing asset in the Media Library follows the same upload pipeline
 
+## Compatibility
+
+This plugin is designed for **Strapi 5**.
+
+- Strapi **5.x**
+- Node.js **20–24**
+- `@strapi/plugin-upload` (included with Strapi)
+
+## Security and privacy
+
+This plugin does not send uploaded images to any external third-party service.
+Image optimization is processed locally on your Strapi server using [Sharp](https://sharp.pixelplumbing.com/).
+Uploaded files remain within the normal Strapi Media Library upload flow.
+
+## Server resources
+
+Large images can consume CPU and memory during optimization.
+For small VPS environments, use reasonable resize and quality settings.
+Avoid allowing extremely large image uploads unless your server resources are sufficient.
+
 ## Development
 
 Clone the repository and install dependencies:
@@ -207,7 +227,14 @@ npm run develop
 
 ## License
 
-[MIT](LICENSE)
+This plugin is licensed under the [MIT License](LICENSE).
+
+This plugin uses [Sharp](https://sharp.pixelplumbing.com/) for image processing. Sharp is a separate open-source dependency and is licensed under its own license terms.
+
+## Disclaimer
+
+This is a community plugin and is not an official Strapi plugin.
+Strapi is a trademark of Strapi Solutions SAS.
 
 ## Author
 
