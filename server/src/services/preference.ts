@@ -63,7 +63,7 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
   },
 
   async getGlobalSettings(): Promise<PluginConfig> {
-    const configDefaults = strapi.plugin(PLUGIN_ID).config as PluginConfig;
+    const configDefaults = strapi.config.get<PluginConfig>(`plugin::${PLUGIN_ID}`);
     const stored = await strapi.store({
       type: 'plugin',
       name: PLUGIN_ID,
